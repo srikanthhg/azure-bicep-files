@@ -6,23 +6,23 @@ param location string
 @description('Address space for the virtual network')
 param vNet_AddressSpace array
 
-@minLength(1)
-@maxLength(10)
-@allowed([
-  [
-    {
-      name: 'Subnet-1'
-      addressPrefix: ''
-    }
-    {    
-      name: 'Subnet-2'
-      addressPrefix: ''
-    }
-  ]
-])
+// @minLength(1)
+// @maxLength(10)
+// @allowed([
+//   [
+//     {
+//       name: 'Subnet-1'
+//       addressPrefix: ''
+//     }
+//     {    
+//       name: 'Subnet-2'
+//       addressPrefix: ''
+//     }
+//   ]
+// ])
 param subnets array
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vNet_Name
   location: location
   properties: {
