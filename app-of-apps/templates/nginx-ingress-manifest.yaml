@@ -14,9 +14,9 @@ spec:
     helm:
       valueFiles:
         - $values/values.yaml
-  - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
-    targetRevision: main
-    ref: values
+  # - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
+  #   targetRevision: main
+  #   ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
