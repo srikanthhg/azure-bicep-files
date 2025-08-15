@@ -1,6 +1,5 @@
 docs
 VM
 Azure_Bicep-20250804T232231Z-1-001.zip
-aks/bicep.ppk
-aks/bicep.pem
-aks/bicep.pfx
+bicep
+bicep.pub

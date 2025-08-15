@@ -1,14 +1,19 @@
+// https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-bicep?tabs=azure-cli
+param location string
 
-
-///////////////////
-param location string = resourceGroup().location
-
-param managed_identity_name string = 'myManagedIdentity'
-
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
-  name: managed_identity_name
+param ismanagedIdentityIdrequired bool = false
+@description('Indicates whether a user-assigned managed identity is required. Default is false.')
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = if (ismanagedIdentityIdrequired) {
+  name: 'myManagedIdentity-${location}'
   location: location
 }
+
+param identityConfiguration object = {
+  type: 'SystemAssigned' // or 'UserAssigned' or 'SystemAssigned, UserAssigned'   Default value
+  userAssignedIdentities: {}
+}
+
+var userAssignedIdentitiesObj = ismanagedIdentityIdrequired ? { '${managedIdentity.id}': {} } : {}
 
 @description('Name of the AKS cluster')
 param aks_name string = 'myaksCluster'
@@ -22,9 +27,9 @@ param sshPublicKey string
 param username string = 'adminUserName'
 
 @description('Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize.')
-@minValue(0)
-@maxValue(30720)
-param osDiskSizeGB int = 30720
+@minValue(10)
+@maxValue(50) // 50GB
+param osDiskSizeGB int = 30 // 30GB
 
 @description('The number of nodes for the cluster.')
 @minValue(1)
@@ -38,37 +43,44 @@ param agentVMSize string = 'standard_d2s_v3'
 @maxValue(250)
 param maxPods int = 50
 
+@description('The ID of the subnet where the AKS cluster will be deployed.')
+param subnetid string
+
 @description('The maximum number of pods that can run on each node in the agent pool.')
 param agentPools array = [
   {
     name: 'agentpool'
     osDiskSizeGB: osDiskSizeGB
     count: agentCount
+    enableAutoScaling: true
+    minCount: 1
     maxCount: 2
     vmSize: agentVMSize
     osType: 'Linux'
     mode: 'System'
     maxPods: maxPods
     osDiskType: 'Ephemeral'
-    enableEncryptionAtHost: true
-    vnetSubnetID: ''
+    vnetSubnetID: subnetid
+    
   }
 ]
+
+// @description('The ID of the Log Analytics workspace to use for monitoring.')
+// param logAnalyticsWorkspaceId string = ''
 
 
 resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
   name: my_aks_name
   location: location
   sku: {
-    name: 'Basic'
+    name: 'Base'
     tier: 'Free'
   }
 
   identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${managedIdentity.id}': {}
-    }
+    type: identityConfiguration.type
+    userAssignedIdentities: (identityConfiguration.type == 'UserAssigned' || identityConfiguration.type == 'SystemAssigned, UserAssigned') ? userAssignedIdentitiesObj : null // null or empty object if not required
+    // userAssignedIdentities: (identityConfiguration.type == 'UserAssigned' || identityConfiguration.type == 'SystemAssigned, UserAssigned') ? identityConfiguration.userAssignedIdentities : {} //null or {}
   }
   
   properties: {
@@ -85,18 +97,18 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
     }
 
     addonProfiles:{
-      omsagent: {
-        enabled: true
-        config: {
-          logAnalyticsWorkspaceResourceID: 'myLogAnalyticsWorkspaceResourceID'
-        }
-      }
+      // omsagent: {
+      //   enabled: true
+      //   config: {
+      //     logAnalyticsWorkspaceResourceID: logAnalyticsWorkspaceId
+      //   }
+      // }
       kubeDashboard: {
         enabled: false
       }
     }
    
-    disableLocalAccounts: true
+    disableLocalAccounts: false
 
     agentPoolProfiles: agentPools
 
