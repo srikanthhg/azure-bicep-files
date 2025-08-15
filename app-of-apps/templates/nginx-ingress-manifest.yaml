@@ -14,7 +14,7 @@ spec:
     targetRevision: 4.13.1
     helm:
       valueFiles:
-        - $values/nginx-values.yaml
+        - ./nginx-values.yaml
   - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
     targetRevision: main
     ref: values
