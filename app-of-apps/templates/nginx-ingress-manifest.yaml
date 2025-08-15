@@ -1,4 +1,4 @@
-{{-if .Values.nginx-ingress.enabled -}}
+{{-if .Values.nginxIngress.enabled -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -14,7 +14,7 @@ spec:
     targetRevision: 4.13.1
     helm:
       valueFiles:
-        - $values/values.yaml
+        - $values/nginx-values.yaml
   - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
     targetRevision: main
     ref: values
