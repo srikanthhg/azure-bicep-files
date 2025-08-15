@@ -12,9 +12,9 @@ spec:
   - chart: ingress-nginx
     repoURL: https://kubernetes.github.io/ingress-nginx
     targetRevision: 4.13.1
-    # helm:
-    #   valueFiles:
-    #     - nginx-values.yaml
+    helm:
+      valueFiles:
+        - nginx-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
