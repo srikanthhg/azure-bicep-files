@@ -1,4 +1,4 @@
-// https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-bicep?tabs=azure-cli
+
 param location string
 
 param ismanagedIdentityIdrequired bool = false
