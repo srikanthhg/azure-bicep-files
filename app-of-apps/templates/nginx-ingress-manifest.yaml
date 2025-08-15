@@ -14,10 +14,10 @@ spec:
     targetRevision: 4.13.1
     helm:
       valueFiles:
-        - ./nginx-values.yaml
-  - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
-    targetRevision: main
-    ref: values
+        - ../nginx-values.yaml
+  # - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
+  #   targetRevision: main
+  #   ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
