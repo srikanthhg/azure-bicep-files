@@ -11,12 +11,12 @@ spec:
     chart: ingress-nginx
     repoURL: https://kubernetes.github.io/ingress-nginx
     targetRevision: 4.13.1
-    # helm:
-    #   valueFiles:
-    #     - $values/values.yaml
-  # - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
-  #   targetRevision: main
-  #   ref: values
+    helm:
+      values: |
+        controller:
+          admissionWebhooks:
+            enabled: false
+ 
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
