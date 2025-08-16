@@ -1,22 +1,23 @@
+{{-if .Values.nginxIngress.enabled -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   name: nginx-ingress
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  source:
-    chart: ingress-nginx
-    repoURL: https://kubernetes.github.io/ingress-nginx
-    targetRevision: 4.13.1
-    helm:
-      values: |
-        controller:
-          admissionWebhooks:
-            enabled: false
- 
+  sources:
+    - repoURL: https://kubernetes.github.io/ingress-nginx
+      chart: ingress-nginx
+      targetRevision: 4.13.1
+      helm:
+        valueFiles:
+          - $values/app-of-apps/nginx-values.yaml   # pulled from GitHub repo
+    - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
+      targetRevision: main
+      ref: values                      # alias to reference values repo
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -26,3 +27,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+{{- end }}
