@@ -1,6 +1,8 @@
 nginxIngress:
   enabled: true
-  controller:
-    replicaCount: 2
-    admissionWebhooks:
-      enabled: false
+
+
+controller:
+  replicaCount: 2
+  admissionWebhooks:
+    enabled: false
