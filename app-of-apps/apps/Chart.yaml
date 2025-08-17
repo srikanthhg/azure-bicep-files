@@ -1,0 +1,4 @@
+apiVersion: v2
+name: app-of-apps
+description: An example of an ArgoCD Application of Applications
+version: 0.1.0
