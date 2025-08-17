@@ -9,10 +9,11 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/srikanthhg/azure-bicep-files.git'
-    targetRevision: main
+    targetRevision: HEAD
     path: app-of-apps/apps
-    directory:
-      recurse: true
+    helm:
+      valueFiles:
+        - nginx-values.yaml   # pulled from GitHub repo
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
