@@ -1,8 +1,4 @@
 nginxIngress:
   enabled: true
+  destinationAKSServer: https://kubernetes.default.svc
 
-
-controller:
-  replicaCount: 2
-  admissionWebhooks:
-    enabled: false

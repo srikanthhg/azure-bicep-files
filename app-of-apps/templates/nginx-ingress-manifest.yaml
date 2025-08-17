@@ -14,12 +14,12 @@ spec:
       targetRevision: 4.13.1
       helm:
         valueFiles:
-          - $values/app-of-apps/nginx-values.yaml   # pulled from GitHub repo
+          - $values/chart-value-files/ingress-nginx.yaml   # pulled from GitHub repo
     - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
       targetRevision: main
       ref: values                      # alias to reference values repo
   destination:
-    server: https://kubernetes.default.svc
+    server: {{ .Values.nginxIngress.destinationAKSServer }} # https://kubernetes.default.svc
     namespace: ingress-nginx
   syncPolicy:
     automated:
