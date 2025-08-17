@@ -9,10 +9,8 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/srikanthhg/azure-bicep-files.git'
-    targetRevision: HEAD
+    targetRevision: main
     path: app-of-apps/apps
-    directory:
-      recurse: true
     helm:
       valueFiles:
         - nginx-values.yaml   # pulled from GitHub repo
