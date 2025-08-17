@@ -13,9 +13,9 @@ spec:
     path: app-of-apps/apps
     directory:
       recurse: true
-    # helm:
-    #   valueFiles:
-    #     - nginx-values.yaml   # pulled from GitHub repo
+    helm:
+      valueFiles:
+        - nginx-values.yaml   # pulled from GitHub repo
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

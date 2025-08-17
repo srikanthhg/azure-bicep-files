@@ -14,7 +14,7 @@ spec:
       targetRevision: 4.13.1
       helm:
         valueFiles:
-          - nginx-values.yaml   # pulled from GitHub repo
+          # - nginx-values.yaml   # pulled from GitHub repo
           - $values/app-of-apps/chart-value-files/ingress-nginx/ingress-nginx.yaml   # pulled from GitHub repo
     - repoURL: https://github.com/srikanthhg/azure-bicep-files.git
       targetRevision: main
