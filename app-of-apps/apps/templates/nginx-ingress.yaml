@@ -27,4 +27,8 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+{{- else }}
+apiVersion: v1
+kind: List
+items: []      
 {{- end }}
