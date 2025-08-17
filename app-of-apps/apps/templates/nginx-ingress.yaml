@@ -1,4 +1,4 @@
-# {{- if .Values.nginxIngress.enabled }}
+{{- if .Values.nginxIngress.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -27,8 +27,8 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-# {{- else }}
-# apiVersion: v1
-# kind: List
-# items: []      
-# {{- end }}
+{{- else }}
+apiVersion: v1
+kind: List
+items: []      
+{{- end }}
