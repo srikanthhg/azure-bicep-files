@@ -1,4 +1,4 @@
 nginxIngress:
   enabled: true
-  destinationAKSServer: https://kubernetes.default.svc
+  destinationAKSServer: "https://kubernetes.default.svc"
 
