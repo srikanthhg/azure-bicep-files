@@ -8,6 +8,8 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-
   location: location
 }
 
+output managedIdentityId string = managedIdentity.id
+
 param identityConfiguration object = {
   type: 'SystemAssigned' // or 'UserAssigned' or 'SystemAssigned, UserAssigned'   Default value
   userAssignedIdentities: {}

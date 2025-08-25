@@ -64,9 +64,13 @@ module aks './aks/aks.bicep' = {
   scope: resourceGroup(resourceGroupName)
   params: {
     location: resourceGroupLocation
+    ismanagedIdentityIdrequired: true
+  
     identityConfiguration: {
-      type: 'SystemAssigned'
-      userAssignedIdentities: {}
+      type: 'UserAssigned'
+      userAssignedIdentities: {
+        '/subscriptions/2cab150b-4433-4b0e-95a8-fabb980b3485/resourceGroups/myRG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myManagedIdentity-eastus': {}
+      }
     }
     sshPublicKey: loadTextContent('./bicep.pub')
     subnetid: vnet.outputs.subnetIds[1].id
