@@ -56,7 +56,7 @@ param agentPools array = [
     count: agentCount
     enableAutoScaling: true
     minCount: 1
-    maxCount: 2
+    maxCount: 4
     vmSize: agentVMSize
     osType: 'Linux'
     mode: 'System'
