@@ -21,7 +21,7 @@ spec:
       ref: values                      # alias to reference values repo
   destination:
     server: {{ .Values.reports.destinationAKSServer }} # https://kubernetes.default.svc
-    namespace: reports
+    namespace: bold-services
   syncPolicy:
     automated:
       prune: true
