@@ -15,7 +15,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2024-07-0
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           access: 'Allow'
-          priority: 100
+          priority: 120
           direction: 'Inbound'
         }
       }
