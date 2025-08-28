@@ -23,7 +23,7 @@ module vnet './vnet/vnet.bicep'= {
       {
         name: 'Subnet-1'
         addressPrefix: '172.19.2.0/24'
-        networkSecurityGroupId: nsg.outputs.nsgId[1] // Optional, can be omitted if not needed
+        networkSecurityGroupId: nsg.outputs.nsgId // Optional, can be omitted if not needed
       }
     ]
   }
