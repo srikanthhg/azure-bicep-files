@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    - repoURL: https://boldreports.github.io/bold-reports-kubernetes
+      repoURL: https://boldreports.github.io/bold-reports-kubernetes
       chart: boldreports
       targetRevision: 10.1.11 
       helm:
