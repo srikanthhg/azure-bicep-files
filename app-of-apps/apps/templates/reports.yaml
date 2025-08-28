@@ -41,7 +41,7 @@ spec:
                 fileShareName: 'forboldreports'
 
                 # hostname of the fileshare Ex:premiumstorage1234.file.core.windows.net.
-                hostName: 'mystoaccforbold.file.core.windows.net'
+                hostName: 'mystoaccforbold.file.core.windows.net.'
 
           image:
             idRepo: us-docker.pkg.dev/boldreports/v10-1-11
