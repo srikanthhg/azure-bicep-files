@@ -18,7 +18,7 @@ param identityConfiguration object = {
 var userAssignedIdentitiesObj = ismanagedIdentityIdrequired ? { '${managedIdentity.id}': {} } : {}
 
 @description('Name of the AKS cluster')
-param aks_name string = 'myaksCluster'
+param aks_name string
 var my_aks_name = '${aks_name}-${location}'
 
 @description('SSH public key for the AKS cluster')
@@ -126,5 +126,9 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
     }
   }
 }
+
+output aksClusterName string = aksCluster.name
+output aksClusterId string = aksCluster.id
+output kubeConfig string = aksCluster.listClusterUserCredential().kubeconfigs[0].value
 
 // az deployment group create --resource-group myRG --template-file aks.bicep --parameters sshPublicKey="$(Get-Content -Raw .\aks_ssh_key.pub)"
