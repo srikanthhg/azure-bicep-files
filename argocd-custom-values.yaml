@@ -20,9 +20,9 @@ server:
     pathType: Prefix
 
     annotations:
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     # extraTls:
     #   - hosts:
     #     - argocd.example.com
