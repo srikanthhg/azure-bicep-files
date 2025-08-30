@@ -1,9 +1,5 @@
-server:
-  service:
-    type: ClusterIP
-
-global:
-  domain: argocd.skanth306.shop
+# global:
+#   domain: argocd.skanth306.shop
 
 configs:
   params:
@@ -12,6 +8,9 @@ configs:
 namespaceOverride: "argocd"
 
 server:
+  service:
+    type: ClusterIP
+
   ingress:
     enabled: true
     ingressClassName: nginx
