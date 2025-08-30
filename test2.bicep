@@ -15,5 +15,4 @@ resource privatednszonegroup 'Microsoft.Network/privateDnsZones/virtualNetworkLi
     }
     registrationEnabled: false
   }
-
-
+}

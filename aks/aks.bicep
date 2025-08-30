@@ -78,7 +78,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
     name: 'Base'
     tier: 'Free'
   }
-
+  
   identity: {
     type: identityConfiguration.type
     userAssignedIdentities: (identityConfiguration.type == 'UserAssigned' || identityConfiguration.type == 'SystemAssigned, UserAssigned') ? userAssignedIdentitiesObj : null // null or empty object if not required
@@ -89,10 +89,15 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
     kubernetesVersion: '1.31'
     dnsPrefix: 'aksdns'
     enableRBAC: true
+    oidcIssuerProfile: {
+      enabled: true
+    }
+    workloadIdentityProfile: {
+      enabled: true
+    }
     autoUpgradeProfile: {
       upgradeChannel: 'patch'
     }
-    
     networkProfile: {
       networkPolicy: 'azure'
       loadBalancerSku: 'standard'
@@ -108,6 +113,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
       kubeDashboard: {
         enabled: false
       }
+
     }
    
     disableLocalAccounts: false
@@ -130,5 +136,6 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
 output aksClusterName string = aksCluster.name
 output aksClusterId string = aksCluster.id
 output kubeConfig string = aksCluster.listClusterUserCredential().kubeconfigs[0].value
+output oidcIssuer string = aksCluster.properties.oidcIssuerProfile.issuerURL
 
 // az deployment group create --resource-group myRG --template-file aks.bicep --parameters sshPublicKey="$(Get-Content -Raw .\aks_ssh_key.pub)"
