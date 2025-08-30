@@ -1,26 +1,22 @@
-# global:
-#   domain: argocd.skanth306.shop
+global:
+  domain: argocd.skanth306.shop
 
 configs:
   params:
     server.insecure: true
 
-namespaceOverride: "argocd"
-
+# server:
+#   service:
+#     type: ClusterIP
 server:
-  service:
-    type: ClusterIP
-
   ingress:
     enabled: true
     ingressClassName: nginx
-    hostname: argocd.skanth306.shop  # defaults to global.domain
-    path: /
-    pathType: Prefix
-
+    # hostname: argocd.skanth306.shop  # defaults to global.domain
     annotations:
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      # nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
       # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     # extraTls:
     #   - hosts:
