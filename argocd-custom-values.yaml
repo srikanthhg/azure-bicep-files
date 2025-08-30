@@ -1,3 +1,5 @@
+# without tls working fine
+---
 # global:
 #   domain: argocd.skanth306.shop
 
@@ -6,52 +8,44 @@
 #     server.insecure: true
 
 # server:
-#   service:
-#     type: ClusterIP
-# server:
 #   ingress:
 #     enabled: true
 #     ingressClassName: nginx
-    # hostname: argocd.skanth306.shop  # defaults to global.domain
-    # annotations:
-      ## nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-      # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      # nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      ## nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    # extraTls:
-    #   - hosts:
-    #     - argocd.example.com
-    #     # Based on the ingress controller used secret might be optional
-    #     secretName: wildcard-tls
-
+#     # hostname: argocd.skanth306.shop
+#     # path: /
+#     # pathType: Prefix
+#     annotations:
+#       nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+#     # tls: false
+#     extraPaths: []
+#     extraRules:
+#       - http:
+#           paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: my-argo-cd-argocd-server
+#                 port:
+#                   number: 80   # 🚨 force HTTP port
 ---
-global:
-  domain: argocd.skanth306.shop
-
 configs:
   params:
-    server.insecure: true
+    server.insecure: true   # ArgoCD stays HTTP internally
 
 server:
   ingress:
     enabled: true
     ingressClassName: nginx
-    # hostname: argocd.skanth306.shop
-    # path: /
-    # pathType: Prefix
+    hostname: argocd.skanth306.shop
+    path: /
+    pathType: Prefix
     annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    # tls: false
-    extraPaths: []
-    extraRules:
-      - http:
-          paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: my-argo-cd-argocd-server
-                port:
-                  number: 80   # 🚨 force HTTP port
-
+    tls: true
+    extraTls:
+      - hosts:
+          - argocd.skanth306.shop
+        secretName: argocd-tls
