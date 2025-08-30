@@ -41,7 +41,7 @@ module vnet './vnet/vnet.bicep'= {
 
 @description('Name of the AKS cluster')
 param aks_name string = 'myaksCluster'
-var my_aks_name = '${aks_name}-${resourceGroup().location}'
+// var my_aks_name = '${aks_name}-${resourceGroup().location}'
 
 module aks './aks/aks.bicep' = {
   name: 'aksDeployment'
@@ -66,6 +66,7 @@ module aks './aks/aks.bicep' = {
 output aksClusterName string = aks.outputs.aksClusterName
 output aksClusterId string = aks.outputs.aksClusterId
 output aksKubeConfig string = aks.outputs.kubeConfig
+output oidcIssuer string = aks.outputs.oidcIssuer
 
 module vm './aks/vm.bicep' = {
   scope: resourceGroup()
