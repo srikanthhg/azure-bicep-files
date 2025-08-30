@@ -48,4 +48,4 @@ chmod +x openvpn-install.sh
 # helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 # helm upgrade --install my-ingress-nginx ingress-nginx/ingress-nginx --version 4.13.2 -f  ./azure-bicep-files/app-of-apps/chart-value-files/ingress-nginx/ingress-values.yaml
 # helm repo add argo https://argoproj.github.io/argo-helm
-# helm install my-argo-cd argo/argo-cd --version 8.3.1 -f ./azure-bicep-files/argocd-custom-values.yaml --create-namespace --namespace argocd
+# helm upgrade --install my-argo-cd argo/argo-cd --version 8.3.1 -f ./azure-bicep-files/argocd-custom-values.yaml --create-namespace --namespace argocd
