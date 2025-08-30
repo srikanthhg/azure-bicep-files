@@ -32,7 +32,7 @@
 ---
 configs:
   params:
-    server.insecure: true   # ArgoCD stays HTTP internally
+    server.insecure: false   #if true--> ArgoCD stays HTTP internally
 
 server:
   ingress:
@@ -43,9 +43,11 @@ server:
     pathType: Prefix
     annotations:
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    tls: true
-    extraTls:
-      - hosts:
-          - argocd.skanth306.shop
-        secretName: argocd-tls
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPs"
+    # tls: true
+    # extraTls:
+    #   - hosts:
+    #       - argocd.skanth306.shop
+    #     secretName: argocd-tls
