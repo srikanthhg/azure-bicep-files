@@ -2,8 +2,8 @@ server:
   service:
     type: ClusterIP
 
-# global:
-#   domain: argocd.example.com
+global:
+  domain: argocd.skanth306.shop
 
 configs:
   params:
