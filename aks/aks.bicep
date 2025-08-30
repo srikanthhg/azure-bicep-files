@@ -92,6 +92,11 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
     oidcIssuerProfile: {
       enabled: true
     }
+    securityProfile: {
+      workloadIdentity: {
+        enabled: true
+      }
+    }
     autoUpgradeProfile: {
       upgradeChannel: 'patch'
     }
@@ -100,19 +105,19 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2025-05-01' = {
       loadBalancerSku: 'standard'
     }
 
-    addonProfiles:{
-      // omsagent: {
-      //   enabled: true
-      //   config: {
-      //     logAnalyticsWorkspaceResourceID: logAnalyticsWorkspaceId
-      //   }
-      // }
-      kubeDashboard: {
-        enabled: false
-      }
+    // addonProfiles:{
+    //   omsagent: {
+    //     enabled: true
+    //     config: {
+    //       logAnalyticsWorkspaceResourceID: logAnalyticsWorkspaceId
+    //     }
+    //   }
+    //   kubeDashboard: {
+    //     enabled: false
+    //   }
 
-    }
-   
+    // }
+
     disableLocalAccounts: false
 
     agentPoolProfiles: agentPools
