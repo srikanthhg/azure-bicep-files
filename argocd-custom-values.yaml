@@ -66,11 +66,12 @@ server:
     enabled: true
     ingressClassName: nginx
     annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-dns
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     tls: true
-    # extraTls:
-    #   - hosts:
-    #     - argocd.skanth306.shop
-    #     # Based on the ingress controller used secret might be optional
-    #     secretName: 
+    extraTls:
+      - hosts:
+        - argocd.skanth306.shop
+        # Based on the ingress controller used secret might be optional
+        secretName: my-wild-card-tls
