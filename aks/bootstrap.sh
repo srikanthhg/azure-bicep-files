@@ -43,3 +43,7 @@ chmod +x openvpn-install.sh
 ./openvpn-install.sh
 
 # az aks get-credentials --name myaksCluster-eastus --resource-group myRG
+alias k=kubectl
+git clone https://github.com/srikanthhg/azure-bicep-files.git
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm upgrade --install my-ingress-nginx ingress-nginx/ingress-nginx --version 4.13.2 -f ./azure-bicep-files/apps-of-apps/chart-value-files/ingress-nginx/.yaml
