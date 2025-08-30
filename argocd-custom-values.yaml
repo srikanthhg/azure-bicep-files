@@ -1,6 +1,6 @@
 server:
   service:
-    type: LoadBalancer  # ClusterIP
+    type: ClusterIP
 
 # global:
 #   domain: argocd.example.com
@@ -8,6 +8,8 @@ server:
 configs:
   params:
     server.insecure: true
+
+namespaceOverride: "argocd"
 
 server:
   ingress:
