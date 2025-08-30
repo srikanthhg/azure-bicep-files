@@ -30,25 +30,47 @@
 #                 port:
 #                   number: 80   # 🚨 force HTTP port
 ---
+# SSL-Passthrough
+# global:
+#   domain: argocd.skanth306.shop
+
+# configs:
+#   params:
+#     server.insecure: false   #bydefault this is false--if true--> ArgoCD stays HTTP internally
+
+# certificate:
+#   enabled: true
+
+# server:
+#   ingress:
+#     enabled: true
+#     ingressClassName: nginx
+#     # hostname: argocd.skanth306.shop
+#     # path: /
+#     # pathType: Prefix
+#     annotations:
+#       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+#       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#     tls: true
+---
+# SSL Termination at Ingress Controller
 global:
   domain: argocd.skanth306.shop
 
 configs:
   params:
-    server.insecure: false   #if true--> ArgoCD stays HTTP internally
-
-certificate:
-  enabled: true
+    server.insecure: true
 
 server:
   ingress:
     enabled: true
     ingressClassName: nginx
-    # hostname: argocd.skanth306.shop
-    # path: /
-    # pathType: Prefix
     annotations:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     tls: true
-
+    # extraTls:
+    #   - hosts:
+    #     - argocd.skanth306.shop
+    #     # Based on the ingress controller used secret might be optional
+    #     secretName: 
