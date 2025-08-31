@@ -75,16 +75,3 @@ server:
         - argocd.skanth306.shop
         # Based on the ingress controller used secret might be optional
         secretName: my-wild-card-tls
-
----
-# global.domain:	"argocd.skanth306.shop"
-# configs.params.server.insecure:	"true"
-# server.ingress.enabled:	"true"
-# server.ingress.ingressClassName:	"nginx"
-# server.ingress.annotations.cert-manager.io/cluster-issuer:	letsencrypt-dns
-# server.ingress.annotations.nginx.ingress.kubernetes.io/force-ssl-redirect:	"true"
-# server.ingress.annotations.nginx.ingress.kubernetes.io/backend-protocol:	"HTTP"
-# server.ingress.tls:	"true"
-# server.ingress.extraTls[0].hosts[0]:	argocd.skanth306.shop
-# server.ingress.extraTls[0].secretName:	my-wild-card-tls
-
