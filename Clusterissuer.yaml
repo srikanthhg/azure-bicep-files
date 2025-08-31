@@ -1,3 +1,12 @@
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.18.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true
+---
+
+
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -22,7 +31,7 @@ spec:
               name: godaddy-api-key-secret
             production: false
             ttl: 600
-          groupName: acme.mycompany.com
+          groupName: acme.skanth306.shop
           solverName: godaddy
 # Add a single challenge solver, HTTP01 using nginx
     # - http01:
@@ -46,3 +55,140 @@ spec:
   issuerRef:
     name: letsencrypt-dns
     kind: ClusterIssuer
+---
+export DOMAIN=acme.skanth306.shop  # replace with your domain
+helm repo add godaddy-webhook https://snowdrop.github.io/godaddy-webhook
+helm repo update
+helm install acme-webhook godaddy-webhook/godaddy-webhook -n cert-manager --set groupName=$DOMAIN
+
+
+---
+
+cat <<EOF > secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: godaddy-api-key-secret
+type: Opaque
+stringData:
+  api-key: <GODADDY_API_KEY:GODADDY_SECRET_KEY>
+EOF
+
+=================================================
+
+Here is a clear, step-by-step guide to implement `SSO login for ArgoCD` with Microsoft Entra ID (Azure AD) using OIDC, based on the official ArgoCD docs and best practices:
+
+Step 1: Register an Application in Microsoft Entra ID (Azure AD)
+Go to Microsoft Entra ID (Azure Portal) → App registrations → + New registration
+
+Enter a name like Argo CD.
+
+Set "Supported account types" to Accounts in this organizational directory only.
+
+Set the redirect URI to:
+
+Platform: Web
+
+URI: https://<your-argocd-domain>/auth/callback
+
+Click Register.
+
+Add another platform for CLI authentication
+
+In the same app registration, go to Authentication → + Add platform → Mobile and desktop applications.
+
+Use redirect URI: http://localhost:8085/auth/callback
+
+Create a client secret
+
+Navigate to Certificates & secrets → + New client secret, give it a name like ArgoCD-SSO.
+
+Copy and save the secret value securely; you will need it later.
+
+Step 2: Add Required API Permissions
+Go to API permissions → + Add a permission.
+
+Choose Microsoft Graph → Delegated permissions → Add the permission User.Read.
+
+Click "Grant admin consent" for your tenant.
+
+Step 3: Assign Users or Groups
+In the Entra ID portal, go to Enterprise applications.
+
+Find the app you created.
+
+Go to Users and groups → Add users or groups that should have access to ArgoCD.
+
+Step 4: Configure ArgoCD for OIDC
+1. Create Kubernetes Secret with OIDC client secret:
+Encode your client secret as base64:
+echo -n '<CLIENT_SECRET>' | base64
+
+Create a secret manifest:
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-oidc-secret
+  namespace: argocd
+type: Opaque
+data:
+  oidc.azure.clientSecret: <base64-encoded-client-secret>
+
+Apply with:
+kubectl apply -f argocd-oidc-secret.yaml
+
+2. Edit ArgoCD ConfigMap:
+
+kubectl edit configmap argocd-cm -n argocd
+
+Add or update these sections:
+
+data:
+  url: https://<your-argocd-domain>
+  oidc.config: |
+    name: Azure
+    issuer: https://login.microsoftonline.com/<TENANT_ID>/v2.0
+    clientID: <APPLICATION_CLIENT_ID>
+    clientSecret: $oidc.azure.clientSecret
+    requestedScopes:
+      - openid
+      - profile
+      - email
+    requestedIDTokenClaims:
+      groups:
+        essential: true
+        value: "SecurityGroupName"
+
+Replace <TENANT_ID>, <APPLICATION_CLIENT_ID>, and <your-argocd-domain> with your values.
+
+3. Edit ArgoCD RBAC ConfigMap for group-role mapping:
+kubectl edit configmap argocd-rbac-cm -n argocd
+
+Example policy:
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:org-admin, applications, *, */*, allow
+    p, role:org-admin, clusters, get, *, allow
+    p, role:org-admin, repositories, get, *, allow
+    p, role:org-admin, repositories, create, *, allow
+    p, role:org-admin, repositories, update, *, allow
+    p, role:org-admin, repositories, delete, *, allow
+    g, "<Azure_AD_Group_Object_ID>", role:org-admin
+
+Replace <Azure_AD_Group_Object_ID> with your group's object ID.
+Step 5: Label ArgoCD Server Deployment for Workload Identity (Optional & recommended for Azure)
+If you use Azure Workload Identity:
+kubectl label pods -n argocd -l app.kubernetes.io/name=argocd-server azure.workload.identity/use=true
+kubectl annotate serviceaccount -n argocd argocd-server azure.workload.identity/client-id=<APPLICATION_CLIENT_ID>
+
+Step 6: Test Login
+Access https://<your-argocd-domain>.
+
+Click “Login via Azure”.
+
+Enter your Microsoft credentials.
+
+You should be logged in with Azure AD SSO.
+
+
